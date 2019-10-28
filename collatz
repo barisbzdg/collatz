@@ -1,0 +1,38 @@
+#include<stdio.h>
+#include<unistd.h>
+#include<stdlib.h>
+#include<sys/wait.h>
+
+int main(){
+int n;
+printf("\nPozitif bir sayı girin: ");
+scanf("%d", &n);
+if(n>0){
+collatz(n);
+}
+else{
+printf("Pozitif bir sayı girin.\n");
+}
+return 0;
+}
+int collatz(int i){
+pid_t child_pid, wpid;
+int waiting = 0;
+if ((child_pid = fork())==0){
+while(i != 1){
+printf("%d ", i);
+if(i%2==0){
+i/=2;
+}
+else{
+i = 3*i+1;
+}
+}
+printf("1\n");
+exit(1);
+}
+while((wpid = wait(&waiting))>0){
+printf("Bitti\n");
+}
+return;
+}
